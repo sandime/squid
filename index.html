@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div#test{ border:#000 1px solid; padding: 10px 40px 40px 40px;}
+    </style>
+    <script>
+        //where the user is during the quiz
+        var pos = 0, test, test_status, question, choice, choices,
+                chA, chB, chC, correct = 0;
+        var questions = [
+            ["What is 10 + 4?", "12", "14", "16", "B"],
+            ["What is 20 - 9?", "7", "14", "11", "C"],
+            ["What is 7 + 3?", "10", "14", "16", "A"],
+            ["What is 8/2?", "12", "14", "4", "C"]
+
+
+        ];
+        function quiz(x) {
+            return document.getElementById(x);
+        }
+        function renderQuestion(){
+            test = quiz("test");
+            if (pos >= questions.length){
+                test.innerHTML ="<h2>You got "+correct+" of "+questions.length+" questions correct</h2>"
+                quiz("test_status").innerHTML = "all done";
+                //reset and restart test
+                pos= 0;
+                correct = 0;
+                //stops function from executing since the test is over
+                return false;
+            }
+            quiz("test_status").innerHTML = "Question "+(pos+1)+" of "+questions.length;
+            question = questions[pos][0];
+            chA = questions[pos][1];
+            chB = questions[pos][2];
+            chC = questions[pos][3];
+            //render the question
+            test.innerHTML = "<h3>" +question+"</h3>";
+            //radio buttons; += gets question and radio button choice
+            test.innerHTML +="<input type='radio' name='choices' value='A'> "+chA+"<br>";
+            test.innerHTML +="<input type='radio' name='choices' value='B'> "+chB+"<br>";
+            test.innerHTML +="<input type='radio' name='choices' value='C'> "+chC+"<br><br>";
+            // button
+            test.innerHTML +="<button onclick='checkAnswer()'>Submit answer</button>";
+        }
+        function checkAnswer (){
+            choices = document.getElementsByName("choices");
+            for (var i=0; i<choices.length; i++) {
+                if (choices[i].checked) {
+                    choice = choices[i].value;
+                }
+
+            }
+            //4 is the last element in the array, the correct choice
+            if (choice == questions[pos][4]){
+                correct++;
+            }
+            //gives the next question
+            pos++;
+            renderQuestion();
+        }
+        window.addEventListener("load", renderQuestion, false);
+    </script>
+</head>
+<body>
+<h2 id="test_status"></h2>
+<div id="test"></div>
+</body>
+</html>
